@@ -144,31 +144,22 @@ func compressSnappyBytes(data []byte) []byte {
 		return nil
 	}
 	// zip data in standard manner
-	var b bytes.Buffer
-	w := snappy.NewBufferedWriter(&b)
-	_, err := w.Write(data)
-	defer w.Close()
-	//
-	// log any problem
-	const ERRM = "Failed compressing data with snappy:"
-	if err != nil {
-		mod.Error(ERRM, err)
-		return nil
-	}
-	ret := b.Bytes()
-	if len(ret) < 3 {
-		mod.Error(ERRM, "length < 3")
-		return nil
-	}
+	ret := snappy.Encode(nil, data)
 	return ret
 } //                                                               compressBytes
 
 // uncompressBytes uncompresses a ZLIB-compressed array of bytes.
 func uncompressSnappyBytes(data []byte) []byte {
-	readCloser := snappy.NewReader(bytes.NewReader(data))
-	ret := bytes.NewBuffer(make([]byte, 0, 8192))
-	io.Copy(ret, readCloser)
-	return ret.Bytes()
+	if len(data) == 0 {
+		return nil
+	}
+	ret, err := snappy.Decode(nil, data)
+	if err != nil {
+		mod.Error("Unexpectd snappy decompression")
+		return nil
+	}
+
+	return ret
 } //                                                             uncompressBytes
 
 // end
