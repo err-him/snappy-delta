@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DTSL/go-delta-sib"
+	"github.com/err-him/snappy-delta"
 )
 
 const Usage = `delu - delta update utility
@@ -31,9 +31,9 @@ func main() {
 		printError("You specified the wrong number of parameters!")
 		fmt.Println(Usage)
 	case a[0] == "apply":
-		applyDelta(a[1], a[2], a[3]) // source, delta, target
+		applyDelta(a[1], a[2], a[3], a[4]) // source, delta, target
 	case a[0] == "make":
-		makeDelta(a[1], a[2], a[3]) // source, target, delta
+		makeDelta(a[1], a[2], a[3], a[4]) // source, target, delta
 	}
 } //                                                                        main
 
@@ -41,7 +41,7 @@ func main() {
 // # Helper Functions
 
 // applyDelta creates 'targetFile' by applying 'deltaFile' to 'sourceFile'.
-func applyDelta(sourceFile, deltaFile, targetFile string) {
+func applyDelta(sourceFile, deltaFile, targetFile string, algo string) {
 	//
 	// make sure the target file does not exist
 	if fileExists(targetFile) {
@@ -66,7 +66,7 @@ func applyDelta(sourceFile, deltaFile, targetFile string) {
 	}
 	// create a Delta from the delta bytes
 	var d delta.Delta
-	d, err = delta.Load(deltaAr)
+	d, err = delta.Load(deltaAr, algo)
 	if err != nil {
 		printError("Failed to apply delta to source:\n", err)
 	}
@@ -98,7 +98,7 @@ func fileExists(path string) bool {
 
 // makeDelta creates 'deltaFile', using 'sourceFile' and 'targetFile'.
 // The delta file only stores the differences between source and target.
-func makeDelta(sourceFile, targetFile, deltaFile string) {
+func makeDelta(sourceFile, targetFile, deltaFile string, algo string) {
 	//
 	// make sure the delta file does not exist
 	if fileExists(deltaFile) {
@@ -122,7 +122,7 @@ func makeDelta(sourceFile, targetFile, deltaFile string) {
 		return
 	}
 	// create a Delta from the difference between source and target
-	d := delta.Make(sourceAr, targetAr)
+	d := delta.Make(sourceAr, targetAr, algo)
 	deltaAr := d.Bytes()
 	//
 	// save the delta

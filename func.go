@@ -144,8 +144,8 @@ func compressSnappyBytes(data []byte) []byte {
 		return nil
 	}
 	// zip data in standard manner
-	buf := new(bytes.Buffer)
-	w := snappy.NewBufferedWriter(buf)
+	var b bytes.Buffer
+	w := snappy.NewBufferedWriter(&b)
 	_, err := w.Write(data)
 	defer w.Close()
 	//
@@ -155,7 +155,7 @@ func compressSnappyBytes(data []byte) []byte {
 		mod.Error(ERRM, err)
 		return nil
 	}
-	ret := buf.Bytes()
+	ret := b.Bytes()
 	if len(ret) < 3 {
 		mod.Error(ERRM, "length < 3")
 		return nil
