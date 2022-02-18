@@ -1,4 +1,4 @@
-module github.com/DTSL/go-delta-sib
+module github.com/err-him/snappy-delta
 
 go 1.16
 
