@@ -2,7 +2,6 @@ package delta
 
 import (
 	"bytes"
-	"fmt"
 )
 
 // Make given two byte arrays 'a' and 'b', calculates the binary
@@ -39,7 +38,6 @@ func Make(a, b []byte, compressionAlgo string) Delta {
 		return ret
 	}
 	cmap := makeMap(a)
-	fmt.Println("After Map")
 	var key chunk
 	for i := 0; i < lenB; {
 		if lenB-i < MatchSize {
