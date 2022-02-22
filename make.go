@@ -2,6 +2,7 @@ package delta
 
 import (
 	"bytes"
+	_ "net/http/pprof"
 )
 
 // Make given two byte arrays 'a' and 'b', calculates the binary

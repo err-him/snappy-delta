@@ -13,10 +13,6 @@ type indexMap struct {
 // The key specifies the unique chunk of bytes, while the
 // values array returns the positions of the chunk in 'data'.
 func makeMap(data []byte) indexMap {
-	if DebugTiming {
-		tmr.Start("makeMap")
-		defer tmr.Stop("makeMap")
-	}
 	if DebugIndex {
 		PL("makeMap init:", len(data), "bytes")
 	}
