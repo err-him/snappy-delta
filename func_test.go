@@ -87,7 +87,6 @@ func printTestName() {
 func readData(filename string) []byte {
 	ret, err := os.ReadFile(filename)
 	if err != nil {
-		PL("File reading error:", err)
 		return nil
 	}
 	return ret

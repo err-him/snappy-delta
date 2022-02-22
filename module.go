@@ -1,36 +1,8 @@
 package delta
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-
-	"github.com/balacode/zr"
-)
-
-// -----------------------------------------------------------------------------
-// # Module Constants / Variables
-
-const (
-	// MatchLimit specifies the maximum number of positions tracked
-	// for each unique key in the map of source data. See makeMap().
-	MatchLimit = 50
-
-	// MatchSize specifies the size of unique
-	// chunks being searched for, in bytes.
-	MatchSize = 9
-)
-
-var (
-	// PL is fmt.Println() but is used only for debugging.
-	PL = fmt.Println
-
-	// TempBufferSize sets the size of memory buffers for reading files and other
-	// streams. This memory is not fixed but allocated/released transiently.
-	TempBufferSize = 32 * 1024 * 1024 // 32 MB
-
-	// tmr is used for timing all methods/functions during tuning.
-	tmr zr.Timer
 )
 
 // -----------------------------------------------------------------------------
@@ -41,7 +13,7 @@ var (
 	DebugInfo = false
 
 	// DebugTiming controls timing (benchmarking) of time spent in each function.
-	DebugTiming = true
+	DebugTiming = false
 
 	// DebugWriteArgs when set, prints the arguments passed to write()
 	DebugWriteArgs = false
@@ -67,7 +39,8 @@ func SetErrorFunc(fn func(args ...interface{}) error) {
 func defaultErrorFunc(args ...interface{}) error {
 	//
 	// write all args to a message string (add spaces between args)
-	var buf bytes.Buffer
+	buf := GetBufPool()
+	defer PutBufPool(buf)
 	for i, arg := range args {
 		if i > 0 {
 			buf.WriteString(" ")
@@ -95,7 +68,5 @@ type thisMod struct {
 	Error func(args ...interface{}) error
 }
 
-// ModReset restores all mocked functions to the original standard functions.
+// Reset ModReset restores all mocked functions to the original standard functions.
 func (ob *thisMod) Reset() { ob.Error = defaultErrorFunc }
-
-// end

@@ -4,15 +4,12 @@ import (
 	"bytes"
 	"fmt"
 )
+
 // Apply uses the 'source' byte array, applies this
 // Delta to it and returns the updated byte array.
 // If this delta was not generated from source,
 // returns an error.
 func (ob *Delta) Apply(source []byte) ([]byte, error) {
-	if DebugTiming {
-		tmr.Start("Delta.Apply")
-		defer tmr.Stop("Delta.Apply")
-	}
 	if len(source) != ob.sourceSize {
 		return nil, mod.Error(fmt.Sprintf(
 			"Size of source [%d] does not match expected [%d]",
