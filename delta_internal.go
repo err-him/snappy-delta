@@ -2,16 +2,6 @@ package delta
 
 // write appends binary difference data
 func (ob *Delta) write(sourceLoc, size int, data []byte) {
-	if DebugTiming {
-		tmr.Start("write")
-		defer tmr.Stop("write")
-	}
-	if DebugInfo && DebugWriteArgs {
-		PL("write",
-			"sourceLoc:", sourceLoc,
-			"size:", size,
-			"data:", data, string(data))
-	}
 	// argument validations
 	switch {
 	case sourceLoc < -1:

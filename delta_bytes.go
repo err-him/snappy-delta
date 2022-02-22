@@ -58,11 +58,11 @@ func (ob *Delta) Bytes() []byte {
 	case zlibCompression:
 		return compressZlibBytes(buf.Bytes())
 	case snappyCompression:
-		return  compressSnappyBytes(buf.Bytes())
+		return compressSnappyBytes(buf.Bytes())
 	case noCompression:
-		return  buf.Bytes()
+		return buf.Bytes()
 	default:
-		return  compressZlibBytes(buf.Bytes())
+		return compressZlibBytes(buf.Bytes())
 	}
 } //                                                                       Bytes
 

@@ -2,7 +2,7 @@ package delta
 
 import (
 	"bytes"
-	_ "net/http/pprof"
+	"fmt"
 )
 
 // Make given two byte arrays 'a' and 'b', calculates the binary
@@ -16,10 +16,6 @@ const (
 )
 
 func Make(a, b []byte, compressionAlgo string) Delta {
-	if DebugTiming {
-		tmr.Start("delta.Make")
-		defer tmr.Stop("delta.Make")
-	}
 	ret := Delta{
 		sourceSize: len(a),
 		sourceHash: makeHash(a),
@@ -43,13 +39,9 @@ func Make(a, b []byte, compressionAlgo string) Delta {
 		return ret
 	}
 	cmap := makeMap(a)
+	fmt.Println("After Map")
 	var key chunk
-	tmc := 0 // timing counter
 	for i := 0; i < lenB; {
-		if DebugInfo && i-tmc >= 10000 {
-			PL("delta.Make:", int(100.0/float32(lenB)*float32(i)), "%")
-			tmc = i
-		}
 		if lenB-i < MatchSize {
 			ret.write(-1, lenB-i, b[i:])
 			ret.newCount++
@@ -72,9 +64,6 @@ func Make(a, b []byte, compressionAlgo string) Delta {
 		i += MatchSize
 		ret.newCount++
 	}
-	if DebugInfo {
-		PL("delta.Make: finished writing parts. len(b) = ", len(b))
-	}
 	return ret
 } //                                                                        Make
 
@@ -96,10 +85,6 @@ func Make(a, b []byte, compressionAlgo string) Delta {
 // and the length of the match in 'b' ('size').
 //
 func longestMatch(a []byte, aLocs []int, b []byte, bLoc int) (loc, size int) {
-	if DebugTiming {
-		tmr.Start("longestMatch")
-		defer tmr.Stop("longestMatch")
-	}
 	if len(aLocs) < 1 {
 		mod.Error("aLocs is empty")
 		return -1, -1

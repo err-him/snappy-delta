@@ -8,16 +8,13 @@ import (
 	"io"
 )
 
+var TempBufferSize = 16 * 1024 * 1024 // 32 MB
 // -----------------------------------------------------------------------------
 // # Helper Functions: Compression
 
 // compressBytes compresses an array of bytes and
 // returns the ZLIB-compressed array of bytes.
 func compressZlibBytes(data []byte) []byte {
-	if DebugTiming {
-		tmr.Start("compressBytes")
-		defer tmr.Stop("compressBytes")
-	}
 	if len(data) == 0 {
 		return nil
 	}
@@ -58,10 +55,6 @@ func uncompressZlibBytes(data []byte) []byte {
 
 // makeHash returns the SHA-512 hash of byte slice 'data'.
 func makeHash(data []byte) []byte {
-	if DebugTiming {
-		tmr.Start("makeHash")
-		defer tmr.Stop("makeHash")
-	}
 	if len(data) == 0 {
 		return nil
 	}
@@ -71,10 +64,6 @@ func makeHash(data []byte) []byte {
 
 // readHash returns the SHA-512 hash of the bytes from 'stream'.
 func readHash(stream io.Reader) []byte {
-	if DebugTiming {
-		tmr.Start("readHash")
-		defer tmr.Stop("readHash")
-	}
 	hasher := sha512.New()
 	buf := make([]byte, TempBufferSize)
 	for first := true; ; first = false {
@@ -136,10 +125,6 @@ func readStream(from io.ReadSeeker, to []byte) (n int64, err error) {
 
 // returns the ZLIB-compressed array of bytes.
 func compressSnappyBytes(data []byte) []byte {
-	if DebugTiming {
-		tmr.Start("compressBytes")
-		defer tmr.Stop("compressBytes")
-	}
 	if len(data) == 0 {
 		return nil
 	}

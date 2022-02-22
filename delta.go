@@ -2,13 +2,13 @@ package delta
 
 // Delta stores the binary delta difference between two byte arrays
 type Delta struct {
-	sourceSize int         // size of the source array
-	sourceHash []byte      // hash of the source byte array
-	targetSize int         // size of the target array
-	targetHash []byte      // hash of the result after this Delta is applied
-	newCount   int         // number of chunks not matched in source array
-	oldCount   int         // number of matched chunks in source array
-	parts      []deltaPart // array referring to chunks in source array,
+	sourceSize      int         // size of the source array
+	sourceHash      []byte      // hash of the source byte array
+	targetSize      int         // size of the target array
+	targetHash      []byte      // hash of the result after this Delta is applied
+	newCount        int         // number of chunks not matched in source array
+	oldCount        int         // number of matched chunks in source array
+	parts           []deltaPart // array referring to chunks in source array,
 	compressionAlgo string      // algo referring to compression algo Zlib/Snappy/none
 	//                        or new bytes to append
 } //                                                                       Delta
