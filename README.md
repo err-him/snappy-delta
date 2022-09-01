@@ -1,5 +1,5 @@
-## go-delta-sib - A Go package and Custom library for generating delta using snappy compression
-[![godoc](https://godoc.org/github.com/DTSL/go-delta-sib?status.svg)](https://godoc.org/github.com/DTSL/go-delta-sib)
+## snappy-delta - A Go package and Custom library for generating delta using snappy compression
+[![godoc](https://godoc.org/github.com/err-him/snappy-delta?status.svg)](https://godoc.org/github.com/err-him/snappy-delta)
 
 ## Suggestions:
 
@@ -16,7 +16,7 @@ package main
 
 import (
     "fmt"
-    "github.com/DTSL/go-delta-sib"
+    "github.com/err-him/snappy-delta"
 )
 
 func main() {
